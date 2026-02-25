@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Cash | ماتركس كاش</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            border: 2px solid #00ff41;
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            min-width: 300px;
+            box-shadow: 0 0 15px #00ff41;
+        }
+        .balance-box {
+            font-size: 2.5em;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        .tasks-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+        .tasks-table th, .tasks-table td {
+            border: 1px solid #00ff41;
+            padding: 10px;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #008f11;
+        }
+        button {
+            background-color: #00ff41;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover { background-color: #008f11; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>[ MATRIX CASH ]</h1>
+        <p>مرحباً بك: {{ user['phone_number'] }}</p>
+
+        <div class="balance-box" id="balanceDisplay" onclick="toggleBalance()">
+            <span id="amount">{{ user['balance'] }}</span> EGP
+        </div>
+        <button onclick="toggleBalance()">إظهار/إخفاء الرصيد</button>
+
+        <h3>📋 جدول المهمات (Quests)</h3>
+        <table class="tasks-table">
+            <tr>
+                <th>المهمة</th>
+                <th>المبلغ</th>
+                <th>الحالة</th>
+            </tr>
+            {% for task in tasks %}
+            <tr class="{{ 'completed' if task['is_completed'] == 1 else '' }}">
+                <td>{{ task['task_desc'] }}</td>
+                <td>{{ task['target_amount'] }}</td>
+                <td>{{ '✅ تم' if task['is_completed'] == 1 else '⏳ جاري' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <script>
+        let hidden = false;
+        const realAmount = "{{ user['balance'] }}";
+        
+        function toggleBalance() {
+            const display = document.getElementById('amount');
+            if (!hidden) {
+                display.innerText = "****";
+                hidden = true;
+            } else {
+                display.innerText = realAmount;
+                hidden = false;
+            }
+        }
+    </script>
+</body>
+</html>
